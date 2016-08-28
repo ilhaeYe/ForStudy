@@ -42,3 +42,7 @@ int main()
 
 // vector는 랜덤 접근에 최적화 되어 있으므로,
 // iterator 보다는 index가 속도가 빠르다.
+
+// 그럼에도 iterator를 사용하는 이유는 다형성 때문,
+// 독립적인 소스코드를 위해 사용.
+// 더 자세한 내용은 WhyIterator.cpp 참고
