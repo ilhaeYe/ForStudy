@@ -17,7 +17,7 @@ int main()
 	float test1 = float(clock() - begin_time) / CLOCKS_PER_SEC;
 
 
-	vector<int> v2(size);	
+	vector<int> v2(size);
 	clock_t begin_time2 = clock();
 	for (vector<int>::iterator it = v2.begin(); it != v2.end(); it++)
 	{
