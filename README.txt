@@ -2,8 +2,8 @@
 
 -- 29 Aug, 2016 
 BinarySearch.cpp :: XLgames Test.
-					find one bit num with binary search algorythm. O(logN)
-					Iterator search algorythm O(n) >> binary search algorythm O(logN)
+	find one bit num with binary search algorythm. O(logN)
+	Iterator search algorythm O(n) >> binary search algorythm O(logN)
 
 -- 29 Aug, 2016 
 Setup the github with visual studio.
