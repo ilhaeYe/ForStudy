@@ -8,7 +8,7 @@ using namespace std;
 // 이 배열은 동일 숫자가 2 개씩 연속해서 존재하지만,
 // 그 중 하나의 숫자는 1 개만 존재합니다.
 // (각 숫자는 이 배열 안에 최대 2개 까지 존재할 수 있습니다.
-// 
+//
 // [1, 1, 3, 3, 5, 4, 4, 6, 6]	(5 가 1개만 존재, 1, 3, 4, 6 은 2 개씩 존재)
 //
 // 이 때, 시간복잡도를 고려해서, 하나만 존재하는 숫자를 찾아내는 함수를 만들어 보세요.
@@ -16,12 +16,12 @@ using namespace std;
 
 
 // 같은 숫자는 2 개씩 연속해서 존재한다는 점을 이용하여
-// 1 개씩 전체를 탐색하는 것보다 
+// 1 개씩 전체를 탐색하는 것보다
 // 2 개씩 탐색하므로 시간복잡도가 반 만큼 더 이득입니다.
 int SolutionIterator(const std::vector<int>& numbers)
 {
-	for (std::vector<int>::const_iterator cit = numbers.cbegin(); cit != numbers.end(); cit += 2)	// (n / 2) + 1
-		if (cit == numbers.cend() - 1 || (*cit) != (*(cit + 1))) return (*cit);						// (n / 2)
+    for (std::vector<int>::const_iterator cit = numbers.cbegin(); cit != numbers.end(); cit += 2)	// (n / 2) + 1
+        if (cit == numbers.cend() - 1 || (*cit) != (*(cit + 1))) return (*cit);						// (n / 2)
 }																									// 총 2 * (n / 2) :: O(n)
 
 
@@ -53,82 +53,82 @@ int SolutionIterator(const std::vector<int>& numbers)
 
 int SolutionBinarySearch(const std::vector<int>& numbers)
 {
-	int s = 0;
-	int e = numbers.size() - 1;
-	int result = -1;
+    int s = 0;
+    int e = numbers.size() - 1;
+    int result = -1;
 
-	if (s == e)
-		return numbers[s];
-	
-	int m = (s + e) >> 1;
+    if (s == e)
+        return numbers[s];
 
-	bool isLeftOdd = false;
+    int m = (s + e) >> 1;
 
-	// left
-	if (numbers[m - 1] == numbers[m])
-	{
-		int left = (m - 2) - s + 1;
-		isLeftOdd = (left % 2 != 0) ? true : false;
-		if (isLeftOdd) e = m - 2;
-		else s = m + 1;
-	}
-	// right
-	else if (numbers[m + 1] == numbers[m])
-	{
-		int right = e - (m + 2) + 1;
-		isLeftOdd = (right % 2 == 0) ? true : false;
-		if (isLeftOdd) e = m - 1;
-		else s = m + 2;
-	}
-	// find
-	else
-	{
-		return numbers[m];
-	}
-	
-	result = SolutionBinarySearch(vector<int>(numbers.begin() + s, numbers.begin() + e + 1));
+    bool isLeftOdd = false;
 
-	return result;
+    // left
+    if (numbers[m - 1] == numbers[m])
+    {
+        int left = (m - 2) - s + 1;
+        isLeftOdd = (left % 2 != 0) ? true : false;
+        if (isLeftOdd) e = m - 2;
+        else s = m + 1;
+    }
+    // right
+    else if (numbers[m + 1] == numbers[m])
+    {
+        int right = e - (m + 2) + 1;
+        isLeftOdd = (right % 2 == 0) ? true : false;
+        if (isLeftOdd) e = m - 1;
+        else s = m + 2;
+    }
+    // find
+    else
+    {
+        return numbers[m];
+    }
+
+    result = SolutionBinarySearch(vector<int>(numbers.begin() + s, numbers.begin() + e + 1));
+
+    return result;
 }
 
 int main()
 {
-//	std::vector<int> numbers(13);
-	std::vector<int> numbers;
+    //	std::vector<int> numbers(13);
+    std::vector<int> numbers;
 
-	int size = 1000001;
-	int dst = 300000;
-	int insertI = 0;
-	int cnt = 0;
-	for (int i = 0; i < size; i++)
-	{
-		if (i == dst) 
-		{
-			numbers.push_back(-100);
-			continue;
-		}
-		if (cnt % 2 == 0) insertI++;
-		numbers.push_back(insertI);
-		cnt++;
-	}
+    int size = 1000001;
+    int dst = 300000;
+    int insertI = 0;
+    int cnt = 0;
+    for (int i = 0; i < size; i++)
+    {
+        if (i == dst)
+        {
+            numbers.push_back(-100);
+            continue;
+        }
+        if (cnt % 2 == 0) insertI++;
+        numbers.push_back(insertI);
+        cnt++;
+    }
 
-	int result = 0;
+    int result = 0;
 
-	clock_t begin2 = clock();
-	result = SolutionBinarySearch(numbers);
-	float test2 = float(clock() - begin2) / CLOCKS_PER_SEC;
-	cout << result << endl;
-	cout << "Binary Search Time :: " << test2 << endl;
+    clock_t begin2 = clock();
+    result = SolutionBinarySearch(numbers);
+    float test2 = float(clock() - begin2) / CLOCKS_PER_SEC;
+    cout << result << endl;
+    cout << "Binary Search Time :: " << test2 << endl;
 
-	cout << endl << endl;
+    cout << endl << endl;
 
-	clock_t begin1 = clock();
-	result = SolutionIterator(numbers);
-	float test1 = float(clock() - begin1) / CLOCKS_PER_SEC;
-	cout << result << endl;
-	cout << "IteratorSearch Time :: " << test1 << endl;
-	
-	return 0;
+    clock_t begin1 = clock();
+    result = SolutionIterator(numbers);
+    float test1 = float(clock() - begin1) / CLOCKS_PER_SEC;
+    cout << result << endl;
+    cout << "IteratorSearch Time :: " << test1 << endl;
+
+    return 0;
 }
 
 // 1,000,001개의 데이터에서 찾는 데이터가 1,000,001번째에 있을 때,
@@ -151,7 +151,7 @@ int main()
 // 단방향은 찾는 데이터가 앞에 있을 수록 빠르고, 뒤로 갈수록 느리다.
 // 바이너리 서치는 일정한 속도, 평균적으로 단방향 보다 빠르다.
 
-// 단방향의 최악의 경우(찾는 데이터가 맨 뒤에 있는 경우)와 바이너리 서치를 비교하면 
+// 단방향의 최악의 경우(찾는 데이터가 맨 뒤에 있는 경우)와 바이너리 서치를 비교하면
 // 체감이 가능할 정도의 속도차이가 많이 난다.
 
 
