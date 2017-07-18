@@ -7,6 +7,7 @@
 #include "Array.h"
 #include "Vector.h"
 
+// Array -----------------------------------------------------------
 void MainArrayFunction::Run()
 {
     /* My array */
@@ -36,89 +37,159 @@ void MainArrayFunction::Run()
     }
 
 }
+// ~Array -----------------------------------------------------------
 
+// Vector -----------------------------------------------------------
 void MainVectorFunction::Run()
 {
+    //{
+    ///* My vector */
+    //RD::Vector<int> vec;
+    //vec.PushBack(1);
+    //vec.PushBack(2);
+    //vec.PushBack(3);
+    //vec.PushBack(4);
+    //vec.PushBack(5);
+
+    //for (size_t i = 0; i < vec.Size(); ++i)
+    //{
+    //    const int val = vec[i];
+    //    std::cout << val << ",";
+    //}
+    //std::cout << std::endl;
+
+    //std::cout << "size : " << vec.Size() << " capacity : " << vec.Capacity() << std::endl;
+
+    //vec.Resize(10);
+    //std::cout << "size : " << vec.Size() << " capacity : " << vec.Capacity() << std::endl;
+    //vec.Resize(3);
+    //std::cout << "size : " << vec.Size() << " capacity : " << vec.Capacity() << std::endl;
+    //vec.Reserve(10);
+    //std::cout << "size : " << vec.Size() << " capacity : " << vec.Capacity() << std::endl;
+
+    //vec.ShrinkToFit();
+    //std::cout << "size : " << vec.Size() << " capacity : " << vec.Capacity() << std::endl;
+    //}
+
+    //{
+    //// performance test compare with std data structure
+    //std::vector<int> stdVec;
+    //RD::Vector<int> myVec;
+    //std::clock_t begin = clock();
+    //std::clock_t end = clock();
+    //double elapsed_secs = 0.0f;
+
+    //begin = clock();
+    //for (int j = 0; j < 100; ++j)
+    //{
+    //    stdVec.clear();
+    //    for (int i = 0; i < 10000; ++i)
+    //    {
+    //        stdVec.push_back(i);
+    //    }
+    //}
+    //end = clock();
+
+    //elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+    //std::cout << "time : " << elapsed_secs << std::endl;
+
+    //begin = clock();
+    //for (int j = 0; j < 100; ++j)
+    //{
+    //    myVec.Clear();
+    //    for (int i = 0; i < 10000; ++i)
+    //    {
+    //        myVec.PushBack(i);
+    //    }
+    //}
+    //end = clock();
+
+    //elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+    //std::cout << "time : " << elapsed_secs << std::endl;
+    ///*
+    //// release
+    //time : 0.005
+    //time : 0.006
+    //*/
+
+    ///*
+    //// size : 100.000
+    //// release
+    //time : 0.004
+    //time : 0.009
+
+    //// debug
+    //time : 0.26 (!?) >> std data-structure has debugging function.
+    //time : 0.009
+    //*/
+    //}
+
     {
-    /* My vector */
-    RD::Vector<int> vec;
-    vec.PushBack(1);
-    vec.PushBack(2);
-    vec.PushBack(3);
-    vec.PushBack(4);
-    vec.PushBack(5);
+        std::vector<Integer> vec;
+        vec.reserve(10);
+        vec.emplace_back(Integer::Create(1));
 
-    for (size_t i = 0; i < vec.Size(); ++i)
-    {
-        const int val = vec[i];
-        std::cout << val << ",";
+        //RD::Vector<Integer> vec;
+        //vec.Reserve(10);
     }
-    std::cout << std::endl;
-
-    std::cout << "size : " << vec.Size() << " capacity : " << vec.Capacity() << std::endl;
-
-    vec.Resize(10);
-    std::cout << "size : " << vec.Size() << " capacity : " << vec.Capacity() << std::endl;
-    vec.Resize(3);
-    std::cout << "size : " << vec.Size() << " capacity : " << vec.Capacity() << std::endl;
-    vec.Reserve(10);
-    std::cout << "size : " << vec.Size() << " capacity : " << vec.Capacity() << std::endl;
-
-    vec.ShrinkToFit();
-    std::cout << "size : " << vec.Size() << " capacity : " << vec.Capacity() << std::endl;
-    }
-
-    {
-    // performance test compare with std data structure
-    std::vector<int> stdVec;
-    RD::Vector<int> myVec;
-    std::clock_t begin = clock();
-    std::clock_t end = clock();
-    double elapsed_secs = 0.0f;
-
-    begin = clock();
-    for (int j = 0; j < 100; ++j)
-    {
-        stdVec.clear();
-        for (int i = 0; i < 10000; ++i)
-        {
-            stdVec.push_back(i);
-        }
-    }
-    end = clock();
-
-    elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-    std::cout << "time : " << elapsed_secs << std::endl;
-
-    begin = clock();
-    for (int j = 0; j < 100; ++j)
-    {
-        myVec.Clear();
-        for (int i = 0; i < 10000; ++i)
-        {
-            myVec.PushBack(i);
-        }
-    }
-    end = clock();
-
-    elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-    std::cout << "time : " << elapsed_secs << std::endl;
-    /*
-    // release
-    time : 0.005
-    time : 0.006
-    */
-
-    /*
-    // size : 100.000
-    // release
-    time : 0.004
-    time : 0.009
-
-    // debug
-    time : 0.26 (!?) >> std data-structure has debugging function.
-    time : 0.009
-    */
-    }
-
 }
+// ~Vector -----------------------------------------------------------
+
+// Union -----------------------------------------------------------
+void MainUnionFunction::Run()
+{
+    // Characteristic of Union
+    using byte = unsigned char;
+    using u32 = unsigned int;
+
+    struct size_byte_t
+    {
+        byte b1;
+        byte b2;
+        byte b3;
+        byte b4;
+    };
+
+    union size_data_t
+    {
+        u32 size;
+        size_byte_t bytes;
+    };
+
+    size_data_t s_data;
+    s_data.size = 0x12345678;
+
+    printf("b1=%2x b2=%2x b3=%2x b4=%2x",
+        s_data.bytes.b1, s_data.bytes.b2, s_data.bytes.b3, s_data.bytes.b3);
+
+    // why do we need union?
+    Initialize();
+    while (!_inputs.empty())
+    {
+        Input i = _inputs.front();
+        switch (i.type)
+        {
+        case WeatherType::Temperature:
+            processTemperature(i.temperData);
+            break;
+        case WeatherType::Wind:
+            processWind(i.windData);
+            break;
+        }
+        _inputs.pop();
+    }
+}
+
+void MainUnionFunction::Initialize()
+{
+    Input first, second;
+
+    first.type = WeatherType::Temperature;
+    first.temperData = { 101, 19890806.0, 91.8, 108.5, 67.2 };
+    _inputs.push(first);
+
+    second.type = WeatherType::Wind;
+    second.windData = { 204, 19890101.0, 14.0, 27.5 };
+    _inputs.push(second);
+}
+// ~Union -----------------------------------------------------------

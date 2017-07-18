@@ -1,13 +1,16 @@
 # ForStudy
 
+-- 18 July, 2017
+Study Union.
+
 -- 14 July, 2017
-Create MainFunction.
+Add MainFunction.
 
 -- 13 July, 2017
-Create My Vector.
+Add My Vector.
 
 -- 10 July, 2017
-Create My Array.
+Add My Array.
 
 -- 29 Aug, 2016
 BinarySearch.cpp :: XLgames Test.
