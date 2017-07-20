@@ -124,10 +124,32 @@ void MainVectorFunction::Run()
     //*/
     //}
 
+    // Iterator
     {
-        std::vector<Integer> vec;
-        vec.reserve(10);
-        vec.emplace_back(Integer::Create(1));
+        int size = 5;
+        RD::Vector<int> vec;
+        vec.Reserve(size);
+        for (int i = 0; i < size; ++i)
+        {
+            vec.PushBack(i);
+        }
+
+        for (auto it = vec.begin(); it != vec.end(); ++it)
+        {
+            std::cout << (*it) << std::endl;
+        }
+        std::cout << std::endl;
+
+        for (auto num : vec)
+        {
+            std::cout << num << std::endl;
+        }
+    }
+
+    {
+        //std::vector<Integer> vec;
+        //vec.reserve(10);
+        //vec.emplace_back(Integer::Create(1));
 
         //RD::Vector<Integer> vec;
         //vec.Reserve(10);

@@ -28,23 +28,23 @@ private:
 class MainVectorFunction : public MainFunction
 {
 public:
-    class Integer
-    {
-    private:
-        int x;
+    //class Integer
+    //{
+    //private:
+    //    int x;
 
-    public:
-        Integer() = delete;
+    //public:
+    //    Integer() = delete;
 
-        static Integer Create(int x)
-        {
-            return Integer(x);
-        }
+    //    static Integer Create(int x)
+    //    {
+    //        return Integer(x);
+    //    }
 
-    private:
-        Integer(int x) : x(x) {}
+    //private:
+    //    Integer(int x) : x(x) {}
 
-    };
+    //};
 
 public:
     MainVectorFunction() = default;

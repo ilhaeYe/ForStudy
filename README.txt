@@ -1,5 +1,8 @@
 # ForStudy
 
+-- 20 July, 2017
+Add Vector Iterator & range-based for loop
+
 -- 18 July, 2017
 Study Union.
 

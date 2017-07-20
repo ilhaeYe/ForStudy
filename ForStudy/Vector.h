@@ -7,6 +7,38 @@ template<class T>
 class Vector
 {
 public:
+    class Iterator
+    {
+    public:
+        Iterator(const Vector<T>* ptr, size_t pos)
+            : _ptr(ptr)
+            , _pos(pos)
+        {}
+
+        // Range based for loop use below methods
+        bool operator!=(const Iterator& other) const
+        {
+            return _pos != other._pos;
+        }
+
+        int operator*() const
+        {
+            return _ptr->At(_pos);
+        }
+
+        const Iterator operator++()
+        {
+            ++_pos;
+            return *this;
+        }
+
+    private:
+        const Vector<T>* _ptr;
+        size_t _pos;
+
+    };
+
+public:
     Vector();
     ~Vector();
 
@@ -21,10 +53,14 @@ public:
     void Insert(const size_t index, const T& value);
     void Insert(const size_t index, const size_t count, const T& value);
     void PushBack(const T& value);
+    T At(const size_t index) const;
 
     void ShrinkToFit();
 
     void Clear();
+
+    Iterator begin() const { return Iterator(this, 0); }
+    Iterator end() const { return Iterator(this, _size); }
 
     T& operator[](const size_t index);
     const T& operator[](const size_t index) const;
@@ -36,10 +72,17 @@ private:
 
 private:
     void Reallocate();
-    bool IsFull();
-    bool IsOutOfRange(const size_t index);
+    bool IsFull() const;
+    bool IsOutOfRange(const size_t index) const;
 
 };
+
+template<class T>
+T RD::Vector<T>::At(const size_t index) const
+{
+    assert(!IsOutOfRange(index));
+    return _data[index];
+}
 
 template<class T>
 void RD::Vector<T>::Clear()
@@ -108,7 +151,7 @@ void RD::Vector<T>::Erase(const size_t startIndex, const size_t endIndex)
 }
 
 template<class T>
-bool RD::Vector<T>::IsOutOfRange(const size_t index)
+bool RD::Vector<T>::IsOutOfRange(const size_t index) const
 {
     return !(index >= 0 && index < _size);
 }
@@ -147,7 +190,7 @@ void RD::Vector<T>::Insert(const size_t index, const T& value)
 }
 
 template<class T>
-bool RD::Vector<T>::IsFull()
+bool RD::Vector<T>::IsFull() const
 {
     return _size == _capacity;
 }
@@ -182,8 +225,15 @@ void RD::Vector<T>::Reserve(const size_t size)
     if (_capacity >= size)
         return;
 
-    _size = size;
-    ShrinkToFit();
+    _capacity = size;
+    T* pTemp = new T[_capacity];
+    for (size_t i = 0; i < _size; ++i)
+    {
+        pTemp[i] = _data[i];
+    }
+
+    delete[] _data;
+    _data = pTemp;
 }
 
 template<class T>
@@ -229,5 +279,3 @@ RD::Vector<T>::Vector() : _data(nullptr), _size(0), _capacity(0)
 }
 
 }
-
-
