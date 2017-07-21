@@ -6,6 +6,7 @@
 
 #include "Array.h"
 #include "Vector.h"
+#include <xmemory0>
 
 // Array -----------------------------------------------------------
 void MainArrayFunction::Run()
@@ -124,27 +125,27 @@ void MainVectorFunction::Run()
     //*/
     //}
 
-    // Iterator
-    {
-        int size = 5;
-        RD::Vector<int> vec;
-        vec.Reserve(size);
-        for (int i = 0; i < size; ++i)
-        {
-            vec.PushBack(i);
-        }
+    //// Iterator
+    //{
+    //    int size = 5;
+    //    RD::Vector<int> vec;
+    //    vec.Reserve(size);
+    //    for (int i = 0; i < size; ++i)
+    //    {
+    //        vec.PushBack(i);
+    //    }
 
-        for (auto it = vec.begin(); it != vec.end(); ++it)
-        {
-            std::cout << (*it) << std::endl;
-        }
-        std::cout << std::endl;
+    //    for (auto it = vec.begin(); it != vec.end(); ++it)
+    //    {
+    //        std::cout << (*it) << std::endl;
+    //    }
+    //    std::cout << std::endl;
 
-        for (auto num : vec)
-        {
-            std::cout << num << std::endl;
-        }
-    }
+    //    for (auto num : vec)
+    //    {
+    //        std::cout << num << std::endl;
+    //    }
+    //}
 
     {
         //std::vector<Integer> vec;
@@ -153,6 +154,8 @@ void MainVectorFunction::Run()
 
         //RD::Vector<Integer> vec;
         //vec.Reserve(10);
+        //vec.PushBack(Integer::Create(1));
+        //vec.Resize(10);
     }
 }
 // ~Vector -----------------------------------------------------------
@@ -215,3 +218,47 @@ void MainUnionFunction::Initialize()
     _inputs.push(second);
 }
 // ~Union -----------------------------------------------------------
+
+// ~Allocator -----------------------------------------------------------
+void MainAllocatorFunction::Run()
+{
+    class Dummy
+    {
+    public:
+        Dummy(int i) : _i(i) { std::cout << "ctor" << std::endl; };
+        ~Dummy() { std::cout << "dtor" << std::endl; };
+
+        int GetI() const { return _i; }
+
+    private:
+        int _i;
+
+    };
+
+    std::allocator<Dummy> alloc;
+    Dummy* pDummy = alloc.allocate(5);
+    alloc.construct(pDummy, Dummy(5));
+    alloc.construct(&pDummy[1], Dummy(3));
+
+    std::cout << pDummy[0].GetI() << std::endl;
+    std::cout << pDummy[1].GetI() << std::endl;
+    std::cout << pDummy[10].GetI() << std::endl;
+
+    alloc.deallocate(pDummy, 5);
+
+    std::cout << pDummy[0].GetI() << std::endl;
+    std::cout << pDummy[1].GetI() << std::endl;
+    std::cout << pDummy[10].GetI() << std::endl;
+
+    // output
+    /*
+    5
+    3
+    -823578275
+
+    -823578275
+    -823578275
+    -823578275
+    */
+
+}

@@ -1,8 +1,11 @@
 #pragma once
 #include <stdlib.h>
+//#include <xmemory0>
 
 namespace RD
 {
+// TODO
+//template<class T, class Allocator = allocator<T>>
 template<class T>
 class Vector
 {
@@ -66,14 +69,15 @@ public:
     const T& operator[](const size_t index) const;
 
 private:
-    T* _data;
-    size_t _size;
-    size_t _capacity;
-
-private:
     void Reallocate();
     bool IsFull() const;
     bool IsOutOfRange(const size_t index) const;
+
+private:
+    T* _data;
+    size_t _size;
+    size_t _capacity;
+    //allocator _alloc;
 
 };
 
@@ -109,6 +113,8 @@ void RD::Vector<T>::ShrinkToFit()
     delete[] _data;
     _data = pTemp;
     _capacity = _size;
+
+    // TODO Allocate
 }
 
 template<class T>
@@ -208,6 +214,8 @@ void RD::Vector<T>::Reallocate()
 
     delete[] _data;
     _data = &pTemp[0];
+
+    // TODO Allocate
 }
 
 template<class T>
@@ -234,6 +242,8 @@ void RD::Vector<T>::Reserve(const size_t size)
 
     delete[] _data;
     _data = pTemp;
+
+    // TODO Allocate
 }
 
 template<class T>
@@ -265,6 +275,7 @@ size_t RD::Vector<T>::Size() const
 template<class T>
 RD::Vector<T>::~Vector()
 {
+    // TODO dealloc
     if (_data != nullptr)
     {
         delete[] _data;
@@ -275,6 +286,7 @@ RD::Vector<T>::~Vector()
 template<class T>
 RD::Vector<T>::Vector() : _data(nullptr), _size(0), _capacity(0)
 {
+    // TODO alloc
 
 }
 

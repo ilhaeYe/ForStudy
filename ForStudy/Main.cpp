@@ -4,8 +4,9 @@ int main()
 {
     MainFunction* pFunc;
     //pFunc = new MainArrayFunction();
-    pFunc = new MainVectorFunction();
+    //pFunc = new MainVectorFunction();
     //pFunc = new MainUnionFunction();
+    pFunc = new MainAllocatorFunction();
 
     pFunc->Run();
 
