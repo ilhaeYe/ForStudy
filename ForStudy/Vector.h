@@ -1,11 +1,9 @@
 #pragma once
 #include <stdlib.h>
-//#include <xmemory0>
+#include <xmemory0>
 
 namespace RD
 {
-// TODO
-//template<class T, class Allocator = allocator<T>>
 template<class T>
 class Vector
 {
@@ -38,6 +36,34 @@ public:
     private:
         const Vector<T>* _ptr;
         size_t _pos;
+
+    };
+
+    class Allocator
+    {
+    public:
+        Allocator() {};
+        ~Allocator() {};
+
+        T* Allocate(size_t size)
+        {
+            return static_cast<T*> (::operator new(sizeof(T) * size));
+        }
+        template<class... ARGS>
+        void Construct(T* ptr, ARGS&&... args)
+        {
+            new(ptr) T(std::forward<ARGS>(args)...);
+        }
+        void Deallocate(T* ptr, size_t size)
+        {
+            ::operator delete(ptr);
+        }
+        void Destroy(T* ptr)
+        {
+            ptr->~T();
+        }
+
+    private:
 
     };
 
@@ -77,7 +103,7 @@ private:
     T* _data;
     size_t _size;
     size_t _capacity;
-    //allocator _alloc;
+    Allocator _alloc;
 
 };
 
@@ -104,17 +130,16 @@ void RD::Vector<T>::Clear()
 template<class T>
 void RD::Vector<T>::ShrinkToFit()
 {
-    T* pTemp = new T[_size];
+    T* pTemp = _alloc.Allocate(_size);
     for (size_t i = 0; i < _size; ++i)
-    {
-        pTemp[i] = _data[i];
-    }
+        _alloc.Construct(&pTemp[i], _data[i]);
 
-    delete[] _data;
+    for (size_t i = 0; i < _size; ++i)
+        _alloc.Destroy(&_data[i]);
+
+    _alloc.Deallocate(_data, _capacity);
     _data = pTemp;
     _capacity = _size;
-
-    // TODO Allocate
 }
 
 template<class T>
@@ -173,7 +198,7 @@ void RD::Vector<T>::Erase(const size_t index)
         _data[i] = _data[i + 1];
     }
 
-    --_size;
+    _alloc.Destroy(&_data[_size--]);
 }
 
 template<class T>
@@ -190,8 +215,8 @@ void RD::Vector<T>::Insert(const size_t index, const T& value)
         _data[i] = _data[i - 1];
     }
 
-    // end
-    _data[index] = value;
+    // insert
+    _alloc.Construct(&_data[index], value);
     ++_size;
 }
 
@@ -204,18 +229,19 @@ bool RD::Vector<T>::IsFull() const
 template<class T>
 void RD::Vector<T>::Reallocate()
 {
-    _capacity = (_capacity == 0) ? 1 : _capacity * 2;
+    const size_t newCapacity = (_capacity == 0) ? 1 : _capacity * 2;
 
-    T* pTemp = new T[_capacity];
+    T* pTemp = _alloc.Allocate(newCapacity);
     for (size_t i = 0; i < _size; ++i)
-    {
-        pTemp[i] = _data[i];
-    }
+        _alloc.Construct(&pTemp[i], _data[i]);
 
-    delete[] _data;
-    _data = &pTemp[0];
+    for (size_t i = 0; i < _size; ++i)
+        _alloc.Destroy(&_data[i]);
 
-    // TODO Allocate
+    _alloc.Deallocate(_data, _capacity);
+
+    _data = pTemp;
+    _capacity = newCapacity;
 }
 
 template<class T>
@@ -224,7 +250,7 @@ void RD::Vector<T>::PushBack(const T& value)
     if (IsFull())
         Reallocate();
 
-    _data[_size++] = value;
+    _alloc.Construct(&_data[_size++], value);
 }
 
 template<class T>
@@ -233,17 +259,17 @@ void RD::Vector<T>::Reserve(const size_t size)
     if (_capacity >= size)
         return;
 
-    _capacity = size;
-    T* pTemp = new T[_capacity];
+    T* pTemp = _alloc.Allocate(size);
     for (size_t i = 0; i < _size; ++i)
-    {
-        pTemp[i] = _data[i];
-    }
+        _alloc.Construct(&pTemp[i], _data[i]);
 
-    delete[] _data;
+    for (size_t i = 0; i < _size; ++i)
+        _alloc.Destroy(&_data[i]);
+
+    _alloc.Deallocate(_data, _capacity);
+
     _data = pTemp;
-
-    // TODO Allocate
+    _capacity = size;
 }
 
 template<class T>
@@ -251,8 +277,22 @@ void RD::Vector<T>::Resize(const size_t size)
 {
     if (_size < size)
     {
-        size_t insertCnt = size - _size;
-        Insert(_size, insertCnt, T());
+        //size_t newCount = size - _size;
+        T* pTemp = _alloc.Allocate(size);
+        for (size_t i = 0; i < _size; ++i)
+            pTemp[i] = _data[i];
+
+        for (size_t i = _size; i < size; ++i)
+            _alloc.Construct(&pTemp[i]);
+
+        for (size_t i = 0; i < _size; ++i)
+            _alloc.Destroy(&_data[i]);
+
+        _alloc.Deallocate(_data, _capacity);
+
+        _data = pTemp;
+        _capacity = size;
+        _size = size;
     }
     else if (_size > size)
     {
@@ -275,18 +315,28 @@ size_t RD::Vector<T>::Size() const
 template<class T>
 RD::Vector<T>::~Vector()
 {
-    // TODO dealloc
-    if (_data != nullptr)
+    // TODO
+    // if (_alloc.address() != nullptr) XXXXX
+    // if (_alloc.max_size() > 0)
+    if (_size > 0) // enough?
     {
-        delete[] _data;
+        for (size_t i = 0; i < _size; ++i)
+        {
+            _alloc.Destroy(&_data[i]);
+        }
+        _alloc.Deallocate(_data, _capacity);
+
+        // have to?
+        _size = 0;
+        _capacity = 0;
         _data = nullptr;
     }
 }
 
 template<class T>
-RD::Vector<T>::Vector() : _data(nullptr), _size(0), _capacity(0)
+RD::Vector<T>::Vector()
+    : _data(nullptr), _size(0), _capacity(0), _alloc(Allocator())
 {
-    // TODO alloc
 
 }
 

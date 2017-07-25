@@ -1,5 +1,10 @@
 # ForStudy
 
+-- 25 July, 2017
+Add CRT Memory leak detector.
+Add Allocator.
+Add Variadic template.
+
 -- 21 July, 2017
 Study Allocator
 

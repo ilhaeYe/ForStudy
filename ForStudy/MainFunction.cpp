@@ -151,11 +151,30 @@ void MainVectorFunction::Run()
         //std::vector<Integer> vec;
         //vec.reserve(10);
         //vec.emplace_back(Integer::Create(1));
+        //vec.resize(10);
 
         //RD::Vector<Integer> vec;
         //vec.Reserve(10);
         //vec.PushBack(Integer::Create(1));
-        //vec.Resize(10);
+        //vec.PushBack(Integer::Create(2));
+        //vec.PushBack(Integer::Create(3));
+        //vec.PushBack(Integer::Create(4));
+        //vec.Erase(0);
+
+        RD::Vector<int> vec;
+        vec.Reserve(10);
+        vec.PushBack(1);
+        vec.PushBack(2);
+        vec.PushBack(3);
+        vec.PushBack(4);
+        vec.Erase(0);
+        vec.Resize(2);
+        vec.ShrinkToFit();
+
+        for (size_t i = 0; i < vec.Size(); ++i)
+        {
+            std::cout << vec[i] << std::endl;
+        }
     }
 }
 // ~Vector -----------------------------------------------------------
@@ -244,6 +263,7 @@ void MainAllocatorFunction::Run()
     std::cout << pDummy[1].GetI() << std::endl;
     std::cout << pDummy[10].GetI() << std::endl;
 
+    //alloc.destroy(pDummy);
     alloc.deallocate(pDummy, 5);
 
     std::cout << pDummy[0].GetI() << std::endl;
